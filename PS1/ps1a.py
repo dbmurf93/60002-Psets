@@ -24,10 +24,19 @@ def load_cows(filename):
     Returns:
     a dictionary of cow name (string), weight (int) pairs
     """
-    # TODO: Your code here
-    pass
+    print("Loading cows to shuttle...")
+    inFile = open(filename, 'r')
+    all_cows = inFile.read() #one long str
+    cow_list = all_cows.split() #split by whitespace (FEELS SUPER CLUMSY)
+    
+    cow_dict = {}
+    for cow in cow_list:
+        cow_name, weight = cow.split(',')
+        cow_dict.update({cow_name: weight}) 
+    
+    return cow_dict
 
-# Problem 2
+
 def greedy_cow_transport(cows,limit=10):
     """
     Uses a greedy heuristic to determine an allocation of cows that attempts to
@@ -50,8 +59,12 @@ def greedy_cow_transport(cows,limit=10):
     transported on a particular trip and the overall list containing all the
     trips
     """
-    # TODO: Your code here
-    pass
+    #print('cows.items=', cows.items())
+    sorted_cows = sorted(cows.items(), key=lambda x: x[1], reverse=True) #returns list of pairs sorted descending order
+    for cow in sorted_cows:
+        
+    
+    
 
 # Problem 3
 def brute_force_cow_transport(cows,limit=10):
@@ -94,3 +107,7 @@ def compare_cow_transport_algorithms():
     """
     # TODO: Your code here
     pass
+
+all_cows = load_cows("PS1\ps1_cow_data.txt")
+print(all_cows)
+print(greedy_cow_transport(all_cows))
