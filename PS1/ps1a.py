@@ -32,7 +32,7 @@ def load_cows(filename):
     cow_dict = {}
     for cow in cow_list:
         cow_name, weight = cow.split(',')
-        cow_dict.update({cow_name: weight}) 
+        cow_dict.update({cow_name: int(weight)}) 
     
     return cow_dict
 
@@ -60,9 +60,27 @@ def greedy_cow_transport(cows,limit=10):
     trips
     """
     #print('cows.items=', cows.items())
-    sorted_cows = sorted(cows.items(), key=lambda x: x[1], reverse=True) #returns list of pairs sorted descending order
-    for cow in sorted_cows:
+    sorted_cows = sorted(cows.items(), key=lambda x: x[1], reverse=True) #returns list of tuples sorted descending order by weights
+    print(sorted_cows) ##for debugging, but I dont think the issue is here
+    trips = [] 
+    shuttle_wt = 0 #empty shuttle
+
+    while len(sorted_cows) > 0: #until theres no more cows
+        trip = [] #empty heifer register
+        shuttle_wt = 0 #empty shuttle 
         
+        for cow in sorted_cows: ##how can i better control iteration through this changing list???
+            cow_wt = cow[1]
+            if cow_wt <= (limit-shuttle_wt): #decide if beast will fit
+                shuttle_wt += cow_wt #allow beast onboard
+                trip.append(cow) #add to ledger
+                sorted_cows.remove(cow) #remove from sorted list
+                
+        trips.append(trip) #add trip ledger to ledger of trip ledgers
+        print("Trip: ",trip) ##The issue is that the last three trips aren't going through the list to recheck
+
+    return trips
+                
     
     
 
@@ -109,5 +127,4 @@ def compare_cow_transport_algorithms():
     pass
 
 all_cows = load_cows("PS1\ps1_cow_data.txt")
-print(all_cows)
-print(greedy_cow_transport(all_cows))
+greedy_cow_transport(all_cows)
