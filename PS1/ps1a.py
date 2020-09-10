@@ -59,26 +59,25 @@ def greedy_cow_transport(cows,limit=10):
     transported on a particular trip and the overall list containing all the
     trips
     """
-    #print('cows.items=', cows.items())
     sorted_cows = sorted(cows.items(), key=lambda x: x[1], reverse=True) #returns list of tuples sorted descending order by weights
-    print(sorted_cows) ##for debugging, but I dont think the issue is here
+    #print(sorted_cows) ##for debugging
     trips = [] 
+    cows_mooved = []
     shuttle_wt = 0 #empty shuttle
-
-    while len(sorted_cows) > 0: #until theres no more cows
+    
+    while len(cows_mooved) != len(sorted_cows): #until theres no cow left behind
         trip = [] #empty heifer register
         shuttle_wt = 0 #empty shuttle 
-        i = 0
-        while i < 2:   #checks list twice 
-            for cow in sorted_cows: ##checks each cow only once, misses cows at the end
-                cow_wt = cow[1] #isolates weight from tuple without altering it
-                if cow_wt <= (limit-shuttle_wt): #decide if beast will fit
-                    shuttle_wt += cow_wt #allow beast onboard
-                    trip.append(cow) #add tuple to ledger
-                    sorted_cows.remove(cow) #remove from sorted list
-            i += 1
-        trips.append(trip) #add trip ledger to ledger of trip ledgers
-        print("Trip: ",trip) #for debugging
+    
+        for cow in sorted_cows: #checks all cows, in sort order
+            if cow in cows_mooved: continue #skips for already ferried heifers
+        
+            if cow[1] <= (limit-shuttle_wt): #if beast will fit
+                shuttle_wt += cow[1] #allow beast onboard
+                trip.append(cow) #add tuple to ledger
+                cows_mooved.append(cow) #add to list
+        ##print("Trip:",trip) 
+        trips.append(trip)
 
     return trips
                 
