@@ -68,16 +68,17 @@ def greedy_cow_transport(cows,limit=10):
     while len(sorted_cows) > 0: #until theres no more cows
         trip = [] #empty heifer register
         shuttle_wt = 0 #empty shuttle 
-        
-        for cow in sorted_cows: ##how can i better control iteration through this changing list???
-            cow_wt = cow[1]
-            if cow_wt <= (limit-shuttle_wt): #decide if beast will fit
-                shuttle_wt += cow_wt #allow beast onboard
-                trip.append(cow) #add to ledger
-                sorted_cows.remove(cow) #remove from sorted list
-                
+        i = 0
+        while i < 2:   #checks list twice 
+            for cow in sorted_cows: ##checks each cow only once, misses cows at the end
+                cow_wt = cow[1] #isolates weight from tuple without altering it
+                if cow_wt <= (limit-shuttle_wt): #decide if beast will fit
+                    shuttle_wt += cow_wt #allow beast onboard
+                    trip.append(cow) #add tuple to ledger
+                    sorted_cows.remove(cow) #remove from sorted list
+            i += 1
         trips.append(trip) #add trip ledger to ledger of trip ledgers
-        print("Trip: ",trip) ##The issue is that the last three trips aren't going through the list to recheck
+        print("Trip: ",trip) #for debugging
 
     return trips
                 
