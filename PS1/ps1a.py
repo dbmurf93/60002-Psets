@@ -7,11 +7,7 @@
 from ps1_partition import get_partitions
 import time
 
-#================================
-# Part A: Transporting Space Cows
-#================================
 
-# Problem 1
 def load_cows(filename):
     """
     Read the contents of the given file.  Assumes the file contents contain
@@ -27,7 +23,7 @@ def load_cows(filename):
     print("Loading cows to shuttle...")
     inFile = open(filename, 'r')
     all_cows = inFile.read() #one long str
-    cow_list = all_cows.split() #split by whitespace (FEELS SUPER CLUMSY)
+    cow_list = all_cows.split() #split by whitespace (CLUMSY?)
     
     cow_dict = {}
     for cow in cow_list:
@@ -35,7 +31,6 @@ def load_cows(filename):
         cow_dict.update({cow_name: int(weight)}) 
     
     return cow_dict
-
 
 def greedy_cow_transport(cows,limit=10):
     """
@@ -81,10 +76,6 @@ def greedy_cow_transport(cows,limit=10):
 
     return trips
                 
-    
-    
-
-# Problem 3
 def brute_force_cow_transport(cows,limit=10):
     """
     Finds the allocation of cows that minimizes the number of spaceship trips
@@ -106,10 +97,23 @@ def brute_force_cow_transport(cows,limit=10):
     transported on a particular trip and the overall list containing all the
     trips
     """
-    # TODO: Your code here
-    pass
+    trip_options = []
+
+    for partition in get_partitions(cows.items()):
+        ledger = [] #clear trips ledger between  
         
-# Problem 4
+        for trip in partition:
+            trip_wt = sum(cow[1] for cow in trip)
+            if trip_wt <= limit:
+                ledger.append([cow[0] for cow in trip]) #adds list of names to list
+                continue
+            else: break #next partition but hits next line first...
+        
+        if len(ledger) == len(partition): #checks if above loop completed vs broke
+            trip_options.append(ledger) 
+
+    return trip_options
+        
 def compare_cow_transport_algorithms():
     """
     Using the data from ps1_cow_data.txt and the specified weight limit, run your
@@ -123,8 +127,32 @@ def compare_cow_transport_algorithms():
     Returns:
     Does not return anything.
     """
-    # TODO: Your code here
-    pass
+    all_cows = load_cows('PS1\ps1_cow_data.txt')
 
-all_cows = load_cows("PS1\ps1_cow_data.txt")
-greedy_cow_transport(all_cows)
+    start = time.time()
+    greedy_list = greedy_cow_transport(all_cows)
+    end = time.time()
+    total = end-start
+    print (total, 'sec')
+    print('Greedy Transport:', greedy_list)
+    print('# of trips:', len(greedy_list))
+
+    start = time.time()
+    power_list = brute_force_cow_transport(all_cows)
+    best = len(all_cows)
+    for ledger in power_list:
+        if len(ledger) < best:
+            best = len(ledger)
+            best_trip = ledger
+    
+    end = time.time()
+    total = end-start
+    print (total, 'sec')
+    print('Best trip:', best_trip)
+    print('# of trips:',best)
+
+def main():
+    compare_cow_transport_algorithms()
+
+if __name__ == "__main__":
+    main()

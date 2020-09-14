@@ -1,7 +1,7 @@
-Miss Moo-dy,3
+Miss_Moo-dy,3
 Milkshake,4
 Lotus,10
-Miss Bella,2
+Miss_Bella,2
 Horns,9
 Betsy,5
 Rose,3
