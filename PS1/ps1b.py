@@ -8,6 +8,7 @@
 #================================
 # Part B: Golden Eggs
 #================================
+import string
 
 # Problem 1
 def dp_make_weight(egg_weights, target_weight, memo = {}):
@@ -22,8 +23,32 @@ def dp_make_weight(egg_weights, target_weight, memo = {}):
     
     Returns: int, smallest number of eggs needed to make target weight
     """
-    # TODO: Your code here
-    pass
+    egg_weights = sorted(egg_weights, reverse=True) #ret list sorted descending order
+    i = 0 #indexer
+    j = 1 #counter
+    ship_weight = 0
+
+    while ship_weight != target_weight:
+        if egg_weights[i] <= (target_weight-ship_weight): #if biggest egg fits...
+            memo.update({egg_weights[i]:j}) #add to dict with counter
+            ship_weight += egg_weights[i] #add aboard
+            j+=1 #increase egg counter
+        else:
+            i+=1 #move to next egg
+            j=1 #reset egg counter
+    
+    
+    output = [] #formatting from here on...
+    for key, value in memo.items():
+        output += ['{0} * {1}'.format(value,key)] #creates a list of lists to be formatted into str
+    
+    output = ' + '.join(output) #join terms 
+    output += (" = {0}".format(target_weight)) #add suffix
+    output = str(sum(memo.values())) + " ({0})".format(output) #for the sake of matching the OG formatting
+    return output #
+    
+    
+
 
 # EXAMPLE TESTING CODE, feel free to add more if you'd like
 if __name__ == '__main__':
