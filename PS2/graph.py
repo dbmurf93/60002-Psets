@@ -55,17 +55,23 @@ class Edge(object):
 
 class WeightedEdge(Edge):
     def __init__(self, src, dest, total_distance, outdoor_distance):
-        pass  # TODO
+        self.src = src
+        self.dest = dest
+        self.total_distance = total_distance
+        self.outdoor_distance = outdoor_distance
 
     def get_total_distance(self):
-        pass  # TODO
+        return self.total_distance
 
     def get_outdoor_distance(self):
-        pass  # TODO
+        return self.outdoor_distance
 
     def __str__(self):
-        pass  # TODO
-
+        src = self.src
+        dst = self.dest
+        td = self.total_distance
+        od = self.outdoor_distance
+        return '{}->{} ({}, {})'.format(src, dst, td, od)
 
 class Digraph(object):
     """Represents a directed graph of Node and Edge objects"""
@@ -90,14 +96,22 @@ class Digraph(object):
     def add_node(self, node):
         """Adds a Node object to the Digraph. Raises a ValueError if it is
         already in the graph."""
-        pass  # TODO
+        if node in self.nodes:
+            raise ValueError
+        else: 
+            self.nodes.add(node)
+            self.edges[node] = [] #stores new node as dict key w/ empty list for edges  
+        
 
     def add_edge(self, edge):
         """Adds an Edge or WeightedEdge instance to the Digraph. Raises a
         ValueError if either of the nodes associated with the edge is not
         in the  graph."""
-        pass  # TODO
-
+        src = edge.get_source()
+        dest = edge.get_destination()
+        if not all(i in self.edges for i in [src,dest]):
+            raise ValueError
+        else: self.edges[src].append(dest)
 
 # ================================================================
 # Begin tests -- you do not need to modify anything below this line
@@ -154,5 +168,5 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(str(self.g), expected)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
