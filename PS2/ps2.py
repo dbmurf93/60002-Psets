@@ -10,20 +10,7 @@
 import unittest
 from graph import Digraph, Node, WeightedEdge
 
-#
-# Problem 2: Building up the Campus Map
-#
-# Problem 2a: Designing your graph
-#
-# What do the graph's nodes represent in this problem? What
-# do the graph's edges represent? Where are the distances
-# represented?
-#
-# Answer:
-#
 
-
-# Problem 2b: Implementing load_map
 def load_map(map_filename):
     """
     Parses the map file and constructs a directed graph

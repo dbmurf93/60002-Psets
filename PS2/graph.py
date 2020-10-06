@@ -6,10 +6,6 @@
 
 import unittest
 
-#
-# A set of data structures to represent graphs
-#
-
 class Node(object):
     """Represents a node in the graph"""
     def __init__(self, name):
@@ -68,24 +64,29 @@ class WeightedEdge(Edge):
 
     def __str__(self):
         src = self.src
-        dst = self.dest
+        dest = self.dest
         td = self.total_distance
         od = self.outdoor_distance
-        return '{}->{} ({}, {})'.format(src, dst, td, od)
+        return '{}->{} ({}, {})'.format(src, dest, td, od)
+
 
 class Digraph(object):
     """Represents a directed graph of Node and Edge objects"""
     def __init__(self):
-        self.nodes = set([])
+        self.nodes = set([]) #redundant?? maybe preserves object class
         self.edges = {}  # must be a dict of Node -> list of edges
 
-    def __str__(self):
-        edge_strs = []
-        for edges in self.edges.values():
+    def __str__(self): #for printing the whole graph
+        edge_strs = [] 
+        for node in self.nodes: 
+            edges = self.get_edges_for_node(node)
             for edge in edges:
-                edge_strs.append(str(edge))
+                print(type(edge)) #debugging
+                edge_strs.append(str(edge)) #ISSUE IS HERE, not using correct __str__ method
+
         edge_strs = sorted(edge_strs)  # sort alphabetically
-        return '\n'.join(edge_strs)  # concat edge_strs with "\n"s between them
+        print ("edge_str_res:", edge_strs) #debugging
+        return '\n'.join(edge_strs)  # concat edge_strs with new lines between them
 
     def get_edges_for_node(self, node):
         return self.edges[node]
@@ -109,9 +110,10 @@ class Digraph(object):
         in the  graph."""
         src = edge.get_source()
         dest = edge.get_destination()
-        if not all(i in self.edges for i in [src,dest]):
+        if not all(i in self.edges.keys() for i in [src,dest]): #checks that both src/dest are in edges
             raise ValueError
-        else: self.edges[src].append(dest)
+        else: 
+            self.edges[src].append(edge) #add dest node to src key list of edges
 
 # ================================================================
 # Begin tests -- you do not need to modify anything below this line
